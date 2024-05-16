@@ -1,0 +1,69 @@
+﻿@page
+@model ejercicios_razor_pages.Pages.IMCModel
+@{
+    ViewData["Title"] = "IMC";
+    String mensaje = "";
+    String img = "";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"]</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h3>Calculo de Índice de Masa Corporal (IMC)</h3>
+
+        <form method="post">
+            <div class="form-group">
+                <label for="peso">Peso:</label>
+                <input type="text" class="form-control" id="peso" asp-for="peso" name="peso" />
+            </div>
+            <div class="form-group">
+                <label for="altura">Altura:</label>
+                <input type="text" class="form-control" id="altura" asp-for="altura" name="altura" />
+            </div>
+            <button type="submit" class="btn btn-primary">Calcular</button>
+			@if (Model.imc < 18)
+			{
+				mensaje = "Peso Bajo. El Índice de Masa Corporal (IMC) es: " + @Model.imc;
+				img = "peso_bajo.png";
+			}
+			else if (Model.imc >= 18 && Model.imc < 25)
+			{
+				mensaje = "Peso Normal. El Índice de Masa Corporal (IMC) es: " + @Model.imc;
+				img = "peso_normal.jpeg";
+			}
+			else if (Model.imc >= 25 && Model.imc < 30)
+			{
+				mensaje = "Sobrepeso.El Índice de Masa Corporal(IMC) es: " + @Model.imc;
+				img = "sobrepeso.jpg";
+			}
+			else if (Model.imc >= 30 && Model.imc < 35)
+			{
+				mensaje = "Obesidad grado I. El Índice de Masa Corporal(IMC) es: " + @Model.imc;
+				img = "obesidad.jpg";
+			}
+			else if (Model.imc >= 35 && Model.imc < 40)
+			{
+				mensaje = "Obesidad grado II. El Índice de Masa Corporal(IMC) es: " + @Model.imc;
+				img = "obesidad_2.png";
+			}
+			else
+			{
+				mensaje = "Obesidad grado III. El Índice de Masa Corporal(IMC) es: " + @Model.imc;
+				img = "obesidad_3.jpeg";
+			}
+            <strong><p>@mensaje</p></strong>
+            <img class="img-fluid" src="~/img/@img" alt="IMC" />
+        </form>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+﻿@page
+@model ejercicios_razor_pages.Pages.programa4Model
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Programa 4</title>
+</head>
+<body>
+    <h2>Random Numbers</h2>
+
+    @{
+        // Crear un arreglo de 20 números enteros aleatorios entre 0 y 100
+        Random random = new Random();
+        int[] randomNumbers = new int[20];
+        for (int i = 0; i < randomNumbers.Length; i++)
+        {
+            randomNumbers[i] = random.Next(0, 101); // 101 porque el límite superior es exclusivo
+        }
+    }
+
+    <ul>
+        @foreach (var number in randomNumbers)
+        {
+            <li>@number</li>
+        }
+    </ul>
+
+    <h3>Resultados Estadísticos</h3>
+
+    @{
+        // Calcular la suma
+        int sum = randomNumbers.Sum();
+
+        // Calcular el promedio
+        double average = randomNumbers.Average();
+
+        // Calcular la moda
+        var mode = randomNumbers
+        .GroupBy(n => n)
+        .OrderByDescending(g => g.Count())
+        .First().Key;
+
+        // Calcular la mediana
+        Array.Sort(randomNumbers);
+        double median;
+        int mid = randomNumbers.Length / 2;
+        if (randomNumbers.Length % 2 == 0)
+        {
+            median = (randomNumbers[mid - 1] + randomNumbers[mid]) / 2.0;
+        }
+        else
+        {
+            median = randomNumbers[mid];
+        }
+    }
+
+    <p><strong>Suma:</strong> @sum</p>
+    <p><strong>Promedio:</strong> @average</p>
+    <p><strong>Moda:</strong> @mode</p>
+    <p><strong>Mediana:</strong> @median</p>
+</body>
+</html>

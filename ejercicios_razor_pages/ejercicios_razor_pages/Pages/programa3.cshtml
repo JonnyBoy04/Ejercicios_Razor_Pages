@@ -1,0 +1,144 @@
+﻿@page
+@model ejercicios_razor_pages.Pages.programa3Model
+@{
+    ViewData["Title"] = "Cálculo de expresión";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewData["Title"]</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1 class="mb-4">Cálculo de expresión</h1>
+
+        <form method="post">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="a">Ingrese el valor de 'a':</label>
+                        <input type="text" class="form-control" id="a" name="a" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="x">Ingrese el valor de 'x':</label>
+                        <input type="text" class="form-control" id="x" name="x" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="b">Ingrese el valor de 'b':</label>
+                        <input type="text" class="form-control" id="b" name="b" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="y">Ingrese el valor de 'y':</label>
+                        <input type="text" class="form-control" id="y" name="y" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="n">Ingrese el valor de 'n':</label>
+                        <input type="text" class="form-control" id="n" name="n" />
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Calcular</button>
+        </form>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+@if (Request.Method == "POST")
+{
+    double a, x, b, y;
+    int n;
+
+    if (double.TryParse(Request.Form["a"], out a) &&
+        double.TryParse(Request.Form["x"], out x) &&
+        double.TryParse(Request.Form["b"], out b) &&
+        double.TryParse(Request.Form["y"], out y) &&
+        int.TryParse(Request.Form["n"], out n))
+    {
+        double resultado1 = Math.Pow((a * x + b * y), n);
+        <h2>Resultado 1:</h2>
+        <p>El resultado de la expresión ((@a)x + (@b)y)<sup>@n</sup> es: @resultado1</p>
+
+        <h2>Resultado 2:</h2>
+        <p>El resultado de la expresión Σ<sup>@n</sup><sub>k=0</sub> (@n / k) (a*x)<sup>@n-k</sup> (b*y)<sup>k</sup>) es:</p>
+        <p style="font-family: monospace;">
+            Σ<sup>@n</sup><sub>k=0</sub> (@n/k) (a*x)<sup>@n-k</sup> (b*y)<sup>k</sup>) =
+            @{
+                for (int k = 0; k <= n; k++)
+                {
+                    double termino = Binomial(n, k) * Math.Pow(a * x, n - k) * Math.Pow(b * y, k);
+                    if (k == n)
+                    {
+                        <text>@termino</text>
+                    }
+                    else
+                    {
+                        <text>@termino + </text>
+                    }
+                }
+            }
+        </p>
+
+        <h2>Resultado 3:</h2>
+        <p>El resultado de la expresión (@n!)/(k!(@n-k)!) es:</p>
+        <p style="font-family: monospace;">
+            @{
+                for (int k = 0; k <= n; k++)
+                {
+                    double termino = Factorial(n) / (Factorial(k) * Factorial(n - k));
+                    if (k == n)
+                    {
+                        <text>@termino</text>
+                    }
+                    else
+                    {
+                        <text>@termino + </text>
+                    }
+                }
+            }
+        </p>
+    }
+    else
+    {
+        <p style="color: red;">Por favor, ingresa valores válidos para 'a', 'x', 'b', 'y' y 'n'.</p>
+    }
+}
+
+@{
+    double Binomial(int n, int k)
+    {
+        double resultado = 1;
+        for (int i = 1; i <= k; i++)
+        {
+            resultado *= (double)(n - i + 1) / i;
+        }
+        return resultado;
+    }
+
+    double Factorial(int n)
+    {
+        double resultado = 1;
+        for (int i = 2; i <= n; i++)
+        {
+            resultado *= i;
+        }
+        return resultado;
+    }
+}
